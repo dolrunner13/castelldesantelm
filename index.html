@@ -120,13 +120,34 @@
         // Append autoplay=1 to force the video to start playing automatically
         const autoplayUrl = videoUrl.includes("?") ? videoUrl + "&autoplay=1" : videoUrl + "?autoplay=1";
 
-        // Open video in fullscreen (new tab)
-        const newTab = window.open(autoplayUrl, "_blank", "noopener,noreferrer");
+        // Create an iframe element dynamically
+        const iframe = document.createElement("iframe");
+        iframe.src = autoplayUrl;
+        iframe.allow = "autoplay; fullscreen";
+        iframe.style.position = "fixed";
+        iframe.style.top = "0";
+        iframe.style.left = "0";
+        iframe.style.width = "100vw";
+        iframe.style.height = "100vh";
+        iframe.style.border = "none";
+        iframe.style.zIndex = "9999"; // Ensures it's on top
 
-        // If pop-ups are blocked, open in the same tab
-        if (!newTab) {
-            window.location.href = autoplayUrl;
-        }
+        // Remove any existing iframes (in case user clicks multiple times)
+        document.body.innerHTML = "";
+        document.body.appendChild(iframe);
+
+        // Request fullscreen mode after a short delay
+        setTimeout(() => {
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { // Firefox
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { // IE/Edge
+                iframe.msRequestFullscreen();
+            }
+        }, 500);
     }
 </script>
 
