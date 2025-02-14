@@ -103,13 +103,28 @@
         <iframe id="video-player" src="" allowfullscreen></iframe>
     </div>
 
-    <script>
+<head>
+    <script defer>
         function playVideo(videoUrl) {
             const playerContainer = document.getElementById('video-player-container');
             const player = document.getElementById('video-player');
 
             player.src = videoUrl;
             playerContainer.style.display = 'block';
+
+            if (player.requestFullscreen) {
+                player.requestFullscreen();
+            } else if (player.mozRequestFullScreen) {
+                player.mozRequestFullScreen();
+            } else if (player.webkitRequestFullscreen) {
+                player.webkitRequestFullscreen();
+            } else if (player.msRequestFullscreen) {
+                player.msRequestFullscreen();
+            }
+        }
+    </script>
+</head>
+
         }
     </script>
 
