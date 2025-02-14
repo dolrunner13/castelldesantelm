@@ -109,19 +109,28 @@
 
 
 
+
 <script>
     function playVideo(videoUrl) {
-        const playerContainer = document.getElementById('video-player-container');
-        const player = document.getElementById('video-player');
-
         // Append autoplay=1 to force the video to start playing automatically
         const autoplayUrl = videoUrl.includes("?") ? videoUrl + "&autoplay=1" : videoUrl + "?autoplay=1";
 
-        // Set the video URL and make the player visible
+        // Create an iframe element dynamically
+        const player = document.createElement("iframe");
         player.src = autoplayUrl;
-        playerContainer.style.display = 'block';
+        player.allow = "autoplay; fullscreen";
+        player.style.position = "fixed";
+        player.style.top = "0";
+        player.style.left = "0";
+        player.style.width = "100vw";
+        player.style.height = "100vh";
+        player.style.border = "none";
+        player.style.zIndex = "9999"; // Ensure it's on top
 
-        // Wait for iframe to load before requesting fullscreen
+        // Append the iframe to the body
+        document.body.appendChild(player);
+
+        // Request fullscreen mode after a short delay
         setTimeout(() => {
             if (player.requestFullscreen) {
                 player.requestFullscreen();
@@ -132,10 +141,34 @@
             } else if (player.msRequestFullscreen) { // IE/Edge
                 player.msRequestFullscreen();
             }
-        }, 500); // Delay to ensure iframe is ready
+        }, 500);
+
+        // Remove the iframe when fullscreen is exited
+        document.addEventListener("fullscreenchange", () => {
+            if (!document.fullscreenElement) {
+                player.remove();
+            }
+        });
+
+        document.addEventListener("webkitfullscreenchange", () => {
+            if (!document.webkitFullscreenElement) {
+                player.remove();
+            }
+        });
+
+        document.addEventListener("mozfullscreenchange", () => {
+            if (!document.mozFullScreenElement) {
+                player.remove();
+            }
+        });
+
+        document.addEventListener("MSFullscreenChange", () => {
+            if (!document.msFullscreenElement) {
+                player.remove();
+            }
+        });
     }
 </script>
-
 
 
 
