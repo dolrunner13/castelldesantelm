@@ -117,28 +117,16 @@
 
 <script>
     function playVideo(videoUrl) {
-        const playerContainer = document.getElementById('video-player-container');
-        const player = document.getElementById('video-player');
-
         // Append autoplay=1 to force the video to start playing automatically
         const autoplayUrl = videoUrl.includes("?") ? videoUrl + "&autoplay=1" : videoUrl + "?autoplay=1";
 
-        // Set the video URL and make the player visible
-        player.src = autoplayUrl;
-        playerContainer.style.display = 'block';
+        // Open video in fullscreen (new tab)
+        const newTab = window.open(autoplayUrl, "_blank", "noopener,noreferrer");
 
-        // Wait for iframe to load before requesting fullscreen
-        setTimeout(() => {
-            if (player.requestFullscreen) {
-                player.requestFullscreen();
-            } else if (player.mozRequestFullScreen) { // Firefox
-                player.mozRequestFullScreen();
-            } else if (player.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                player.webkitRequestFullscreen();
-            } else if (player.msRequestFullscreen) { // IE/Edge
-                player.msRequestFullscreen();
-            }
-        }, 500); // Delay to ensure iframe is ready
+        // If pop-ups are blocked, open in the same tab
+        if (!newTab) {
+            window.location.href = autoplayUrl;
+        }
     }
 </script>
 
