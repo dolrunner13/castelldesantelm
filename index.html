@@ -109,14 +109,12 @@
 
 
 
-    
-
 <script>
     function playVideo(videoUrl) {
         // Append autoplay=1 to force the video to start playing automatically
         const autoplayUrl = videoUrl.includes("?") ? videoUrl + "&autoplay=1" : videoUrl + "?autoplay=1";
 
-        // Create an iframe element dynamically
+        // Create a hidden iframe for the video
         const iframe = document.createElement("iframe");
         iframe.src = autoplayUrl;
         iframe.allow = "autoplay; fullscreen";
@@ -128,11 +126,10 @@
         iframe.style.border = "none";
         iframe.style.zIndex = "9999"; // Ensures it's on top
 
-        // Remove any existing iframes (in case user clicks multiple times)
-        document.body.innerHTML = "";
+        // Append the iframe to the body without removing the webpage
         document.body.appendChild(iframe);
 
-        // Request fullscreen mode after a short delay
+        // Request fullscreen mode
         setTimeout(() => {
             if (iframe.requestFullscreen) {
                 iframe.requestFullscreen();
@@ -144,8 +141,34 @@
                 iframe.msRequestFullscreen();
             }
         }, 500);
+
+        // Remove the iframe when fullscreen is exited
+        document.addEventListener("fullscreenchange", () => {
+            if (!document.fullscreenElement) {
+                iframe.remove();
+            }
+        });
+
+        document.addEventListener("webkitfullscreenchange", () => {
+            if (!document.webkitFullscreenElement) {
+                iframe.remove();
+            }
+        });
+
+        document.addEventListener("mozfullscreenchange", () => {
+            if (!document.mozFullScreenElement) {
+                iframe.remove();
+            }
+        });
+
+        document.addEventListener("MSFullscreenChange", () => {
+            if (!document.msFullscreenElement) {
+                iframe.remove();
+            }
+        });
     }
 </script>
+
 
 
 </body>
