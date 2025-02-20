@@ -218,7 +218,7 @@
     function playVideo(videoUrl) {
         // Append autoplay=1 to force the video to start playing automatically
         const autoplayUrl = videoUrl.includes("?") ? videoUrl + "&autoplay=1" : videoUrl + "?autoplay=1";
-        event.target.setPlaybackQuality('hd2160'); // Force 2160p
+       
 
         // Create an iframe element dynamically
         const player = document.createElement("iframe");
